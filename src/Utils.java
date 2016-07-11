@@ -1,6 +1,8 @@
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -202,7 +204,7 @@ public class Utils {
 	 *            data to write to file
 	 */
 	public static void writeToFile(WindowProgress window,String filePath, String text) {
-		BufferedWriter writer = null;
+		OutputStreamWriter writer = null;
 		try {
 			// create a temporary file
 			File logFile = new File(filePath);
@@ -211,7 +213,7 @@ public class Utils {
 			// to...
 			window.display(logFile.getCanonicalPath());
 
-			writer = new BufferedWriter(new FileWriter(logFile));
+			writer = new OutputStreamWriter(new FileOutputStream(logFile),"UTF-8");
 			writer.write(text);
 		} catch (Exception e) {
 			e.printStackTrace();
