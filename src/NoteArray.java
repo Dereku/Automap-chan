@@ -266,11 +266,16 @@ public class NoteArray {
 			keyCount = keyCount + 1;
 		}
 
+		ArrayList<Integer> columns = new ArrayList<>();
+		for (int i = 0; i < notes.size(); i++){
+			columns.add(notes.get(i).getColumn());
+		}
+		Collections.sort(columns);
 		for (int i = 0; i < notes.size(); i++) { // we work under the assumption
 													// that notes.size() is
 													// smaller than keyCount
 			Note n = notes.get(i);
-			output += n.toHitObject(n.getColumn(), resolution, keyCount,
+			output += n.toHitObject(columns.get(i), resolution, keyCount,
 					LN_Cutoff, volume);
 		}
 

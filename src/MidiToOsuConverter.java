@@ -521,6 +521,7 @@ public class MidiToOsuConverter implements ActionListener, Runnable {
 		Iterator<NoteArray> ite = list.iterator();
 		while (ite.hasNext()) {
 			NoteArray chord = ite.next();
+			chord.sortByPitch();
 			sampleOutput += chord.toBackgroundSample(volume);
 			osuOutput += chord.toHitObjects(keyCount,
 					sequencer.getSequence().getResolution(), LN_Cutoff, volume);
