@@ -1,5 +1,3 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +22,7 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 import javax.swing.JOptionPane;
 
-public class MidiToOsuConverter implements ActionListener, Runnable {
+public class MidiToOsuConverter implements Runnable {
 	// User Input
 	private String filename;
 	private boolean extractNotes;
@@ -630,13 +628,6 @@ public class MidiToOsuConverter implements ActionListener, Runnable {
 
 		}
 
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// signal the worker thread to get crackin
-        synchronized(this){notifyAll();}
-		
 	}
 
 	
