@@ -702,7 +702,6 @@ public class WindowOption extends javax.swing.JFrame {
         }
         writeToPropertyFile(System.getProperty("user.dir"));
         MidiToOsuConverter converter = new MidiToOsuConverter(sequencer, name, extractHitSounds, keys, maxChord, overallDifficulty, trackOptions,mergeHS);
-        jButton6.addActionListener(converter);
         new Thread(converter).start();
         dispose();
 

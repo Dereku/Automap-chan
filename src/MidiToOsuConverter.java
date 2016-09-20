@@ -27,6 +27,7 @@ public class MidiToOsuConverter implements Runnable {
 	private String filename;
 	private boolean extractNotes;
 	private int keyCount;
+	// Need implement LN
 	private int LN_Cutoff=999999;
 	private int volume=100;
 	private boolean customHS = false;
@@ -36,9 +37,11 @@ public class MidiToOsuConverter implements Runnable {
 	private int MAX_CHORD = 3;
 	private int sampleRate = 16000;
 	private int bitDepth = 16;
-	private int channelMode = 1;
+	private int channelMode = 2;
 	private boolean customTiming = false;
 	private boolean mergeHS;
+	// Need fix OGG
+	private boolean convertOGG = true;
 
 	// Constants
 	private int bpm;
@@ -50,7 +53,7 @@ public class MidiToOsuConverter implements Runnable {
 	private String outputPath;
 	private Sequencer sequencer = null;
 	private int HitSoundSize = 0;
-	private int outputSize = 1;
+	private int outputSize = 2;
 	private final String version;
 	private int [] options;
 	private WindowProgress progressWindow = null;
@@ -60,6 +63,7 @@ public class MidiToOsuConverter implements Runnable {
 	ArrayList<Long> absTimeline = new ArrayList<Long>();
 	ArrayList<Long> tickTimeline = new ArrayList<Long>();
 	ArrayList<Long> tempoArray = new ArrayList<Long>();
+	private long songDurationInMS = 0;
 	//instrument
 	int[] instruments = new int[16];
 	private int currentSize = 0;
@@ -108,10 +112,13 @@ public class MidiToOsuConverter implements Runnable {
 	}
 
 	public void run() {
+		songDurationInMS = sequencer.getMicrosecondLength()/1000L;
+		System.out.println(songDurationInMS);
 		if (extractNotes && customHS == false) {
 			Utils.createFolder(hitsoundPath);
 		}
 		Utils.createFolder(outputPath);
+		Utils.createEmptyWAV(songDurationInMS * 8, outputPath + OsuBeatmap.audioName);
 		if (customHS) {
 			loadHSConvert(convert);
 		}
@@ -224,6 +231,9 @@ public class MidiToOsuConverter implements Runnable {
 			extractNote(n, filename);
 			currentSize++;
 			progressWindow.updateProgress(currentSize);
+		}
+		if (convertOGG){
+			Utils.convertHStoOGG(hitsoundPath);
 		}
 		progressWindow.display("Finished extracting all hit sounds");
 	}
@@ -471,6 +481,10 @@ public class MidiToOsuConverter implements Runnable {
 	
 	
 	public void toOsuBeatmap(ArrayList<NoteArray> input) throws MidiUnavailableException, InvalidMidiDataException, IOException{
+		// Create empty WAV file with same duration as song
+		String silence = outputPath + OsuBeatmap.audioName;
+		Utils.createEmptyMp3(silence);
+		currentSize++;
 		NoteArray totalNotes = input.get(0);
 		if (totalNotes.getSize()==0){
 			System.out.println("No notes to convert!");

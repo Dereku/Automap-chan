@@ -256,11 +256,12 @@ public class NoteArray {
 
 	public String toHitObjects(int keyCount, int resolution, int LN_Cutoff,
 			int volume) {
+		
 		if (notes.size()==0){
 			return "";
 		}
 		String output = "";
-
+		int iniKeyCount = keyCount;
 		while (notes.size() > keyCount) {
 			// if there are too many keys then stack them on top of each other
 			keyCount = keyCount + 1;
@@ -275,7 +276,7 @@ public class NoteArray {
 													// that notes.size() is
 													// smaller than keyCount
 			Note n = notes.get(i);
-			output += n.toHitObject(columns.get(i), resolution, keyCount,
+			output += n.toHitObject(columns.get(i), resolution, iniKeyCount,
 					LN_Cutoff, volume);
 		}
 

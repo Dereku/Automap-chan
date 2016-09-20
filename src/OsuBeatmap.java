@@ -4,7 +4,8 @@ public class OsuBeatmap {
 	// Instance Variables
 	private int OsuVersion = 14;
 	// General
-	private String audio = "virtual";
+	public static String audioName = "audio";
+	private String audio = audioName + ".mp3";
 	private int audioLeadIn = 0;
 	private int previewTime = -1;
 	private int countdown = 0;

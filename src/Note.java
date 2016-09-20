@@ -238,7 +238,9 @@ public class Note {
 					+ abstime + ", bpm = " + bpm + ", resolution = "
 					+ resolution + "\n");
 		}
-		if (LNduration < resolution * LN_Cutoff) {// short note
+		//disabled LN
+		/*
+		if (LNduration < resolution * LN_Cutoff) {
 			// short note if duration is less than LN_Cutoff beat(s)
 			ho = new HitObject(column, abstime, volume, getHitSound());
 		} else {
@@ -247,6 +249,11 @@ public class Note {
 			ho = new HitObject(column, abstime, volume, end,
 					getHitSound());
 		}
+		*/
+		// Warning
+		ho = new HitObject(column, abstime, volume, getHitSound());
+		// Above needs to be changed when implementing LN
+		
 		s = ho.toString();
 		return s;
 	}
