@@ -262,7 +262,7 @@ public class Note {
 	public String toString() {
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(1);
-		return name + " velocity=" + velocity + " duration=" + LNduration;
+		return "Channel " + channel + " time " + time + " " +name + " velocity=" + velocity + " duration=" + LNduration;
 	}
 
 	public String debugTime() {

@@ -323,6 +323,7 @@ public class MidiUtils {
 		File f = new File(filepath);
 		if (f.isFile()){
 			Sequence sequence = MidiSystem.getSequence(f);
+			System.out.println(sequence.getMicrosecondLength());
 			Sequencer sequencer = MidiSystem.getSequencer();
 			sequencer.setSequence(sequence);
 			return sequencer;

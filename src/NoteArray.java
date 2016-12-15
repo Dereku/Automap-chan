@@ -15,6 +15,10 @@ public class NoteArray {
 	}
 
 	public void add(Note n) {
+		if (n.getName() == null){
+			System.out.println("NoteArray.add(Note n) Exception: Name is null!");
+			System.exit(-1);
+		}
 		notes.add(n.clone());
 		counter++;
 	}
@@ -102,15 +106,46 @@ public class NoteArray {
 				return true;
 			}
 		}
-		System.out.println(toString());
-		System.out.println(n.toString());
+		System.out.println("Note being serached " + n.toString());
+		System.out.println("Note is not found");
+		System.out.println("Note array: \n" + toString());
+
+		//System.exit(-1);
 		return false;
 	}
 
-	public boolean contains(Note n, int d, int tempo) {
+	public boolean contains(Note n, int tempo) {
 		// check if the arraylist contains the note with unique duration
+		if (n.getName() == null){
+			System.out.println("cant check note with null name");
+			System.exit(-1);
+		}
+		//System.out.println(n.getName() + " duration " +n.getDuration() + "  BPM  " + n.getBPM());
 		for (Note note : notes) {
 			if (note.getInstrumentName().equals(n.getInstrumentName())) {
+				//System.out.println(note.getName());
+
+				if (note.getName().equals(n.getName())
+						 && note.getBPM() == tempo) {
+					return true;
+				}
+			}
+
+		}
+		return false;
+	}
+	
+	public boolean contains(Note n, int d, int tempo) {
+		// check if the arraylist contains the note with unique duration
+		if (n.getName() == null){
+			System.out.println("cant check note with null name");
+			System.exit(-1);
+		}
+		//System.out.println(n.getName() + " duration " +n.getDuration() + "  BPM  " + n.getBPM());
+		for (Note note : notes) {
+			if (note.getInstrumentName().equals(n.getInstrumentName())) {
+				//System.out.println(note.getName());
+
 				if (note.getName().equals(n.getName())
 						&& note.getDuration() == d && note.getBPM() == tempo) {
 					return true;
