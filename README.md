@@ -6,3 +6,6 @@ Updated 11 July, 2016
 - Sort hit sounds by pitch for each chord
 - Create silent mp3
 - Convert WAV to OGG and rename as WAV
+
+Updated 14 December, 2016
+- Fixed bug with channel volume = 0 event before note off event
