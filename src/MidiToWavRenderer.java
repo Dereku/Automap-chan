@@ -22,8 +22,8 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
-import be.hogent.tarsos.midi.MidiCommon;
-import be.hogent.tarsos.midi.MidiUtils;
+import be.tarsos.midi.MidiCommon;
+import be.tarsos.midi.MidiUtils;
 
 import com.sun.media.sound.AudioSynthesizer;
 

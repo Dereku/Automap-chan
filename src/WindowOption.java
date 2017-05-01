@@ -50,7 +50,7 @@ import java.awt.event.ActionEvent;
 @SuppressWarnings("serial")
 public class WindowOption extends javax.swing.JFrame {
 
-    private String name;
+    private final String name;
     private int keySet;
     private int overallDifficulty;
     private int maxChord;
@@ -58,7 +58,6 @@ public class WindowOption extends javax.swing.JFrame {
     private boolean mergeHS;
     private boolean extractHitSounds;
     private JCheckBox extractHitsoundCheckbox;
-
 
     /**
      * Creates new form WindowOption
@@ -75,11 +74,9 @@ public class WindowOption extends javax.swing.JFrame {
         } else {
             this.sequencer = sequencer;
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                initComponents();
-                initComponents2();
-            }
+        SwingUtilities.invokeLater(() -> {
+            initComponents();
+            initComponents2();
         });
 
     }
@@ -102,9 +99,9 @@ public class WindowOption extends javax.swing.JFrame {
         stopButton = new javax.swing.JButton();
         pauseButton = new javax.swing.JButton();
         difficultySlider = new javax.swing.JSlider(1, 10, overallDifficulty);
-        int l_maxChord=keySet;
-        if (coop){
-        	l_maxChord = 2*keySet;
+        int l_maxChord = keySet;
+        if (coop) {
+            l_maxChord = 2 * keySet;
         }
         maxChordSlider = new javax.swing.JSlider(1, l_maxChord, maxChord);
         keySetSlider = new javax.swing.JSlider(4, 9, keySet);
@@ -194,10 +191,10 @@ public class WindowOption extends javax.swing.JFrame {
         keySetSlider.setSnapToTicks(true);
         keySetSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-            	keySetLabel.setText(Integer.toString(keySetSlider.getValue()));
+                keySetLabel.setText(Integer.toString(keySetSlider.getValue()));
                 int max = keySetSlider.getValue();
-                if (coopCheckBox.isSelected()){
-                	max = max * 2;
+                if (coopCheckBox.isSelected()) {
+                    max = max * 2;
                 }
                 maxChordSlider.setMaximum(max);
                 maxChordSlider.setValue(keySetSlider.getValue());
@@ -219,10 +216,10 @@ public class WindowOption extends javax.swing.JFrame {
         coopCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-            	keySetLabel.setText(Integer.toString(keySetSlider.getValue()));
+                keySetLabel.setText(Integer.toString(keySetSlider.getValue()));
                 int max = keySetSlider.getValue();
-                if (coopCheckBox.isSelected()){
-                	max = max * 2;
+                if (coopCheckBox.isSelected()) {
+                    max = max * 2;
                 }
                 maxChordSlider.setMaximum(max);
                 maxChordSlider.setValue(keySetSlider.getValue());
@@ -274,177 +271,176 @@ public class WindowOption extends javax.swing.JFrame {
                 volumeButtonActionPerformed(evt);
             }
         });
-        
+
         JButton btnAllToSample = new JButton("All to Sample");
         btnAllToSample.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		if (!hitNoteListModel.isEmpty()){
-        			for (int i = 0; i<hitNoteListModel.getSize();i++){
-       				 int trackID = getTrackID(hitNoteListModel.getElementAt(i));
+            public void actionPerformed(ActionEvent e) {
+                if (!hitNoteListModel.isEmpty()) {
+                    for (int i = 0; i < hitNoteListModel.getSize(); i++) {
+                        int trackID = getTrackID(hitNoteListModel.getElementAt(i));
                         toSample(trackID);
-        			}
-       			}
-        			
-        		if (outputList.getModel().getSize()!=0) {
-        			for (int i = 0; i<outputList.getModel().getSize();i++){
-        				 int trackID = getTrackID(outputList.getModel().getElementAt(i));
-        				 String s = "Track "+trackID;
-        				 if (!sampleListModel.contains(s)){
-                             toSample(trackID);
-        				 }
-        			}
+                    }
                 }
-        	}
+
+                if (outputList.getModel().getSize() != 0) {
+                    for (int i = 0; i < outputList.getModel().getSize(); i++) {
+                        int trackID = getTrackID(outputList.getModel().getElementAt(i));
+                        String s = "Track " + trackID;
+                        if (!sampleListModel.contains(s)) {
+                            toSample(trackID);
+                        }
+                    }
+                }
+            }
         });
-        
+
         btnAllToHitNotes = new JButton("All to Hit Notes");
         btnAllToHitNotes.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		if (!sampleListModel.isEmpty()){
-        			for (int i = 0; i<sampleListModel.getSize();i++){
-       				 int trackID = getTrackID(sampleListModel.getElementAt(i));
+            public void actionPerformed(ActionEvent e) {
+                if (!sampleListModel.isEmpty()) {
+                    for (int i = 0; i < sampleListModel.getSize(); i++) {
+                        int trackID = getTrackID(sampleListModel.getElementAt(i));
                         toHitNote(trackID);
-        			}
-       			}
-        			
-        		if (outputList.getModel().getSize()!=0) {
-        			for (int i = 0; i<outputList.getModel().getSize();i++){
-        				 int trackID = getTrackID(outputList.getModel().getElementAt(i));
-        				 String s = "Track "+trackID;
-        				 if (!hitNoteListModel.contains(s)){
-        					 toHitNote(trackID);
-        				 }
-        			}
+                    }
                 }
-        		
-        		
-        	}
+
+                if (outputList.getModel().getSize() != 0) {
+                    for (int i = 0; i < outputList.getModel().getSize(); i++) {
+                        int trackID = getTrackID(outputList.getModel().getElementAt(i));
+                        String s = "Track " + trackID;
+                        if (!hitNoteListModel.contains(s)) {
+                            toHitNote(trackID);
+                        }
+                    }
+                }
+
+            }
         });
-        
+
         btnRestToSample = new JButton("Rest to Sample");
         btnRestToSample.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		if (outputList.getModel().getSize()!=0) {
-        			for (int i = 0; i<outputList.getModel().getSize();i++){
-        				 int trackID = getTrackID(outputList.getModel().getElementAt(i));
-        				 String s = "Track "+trackID;
-        				 if (!sampleListModel.contains(s) && !hitNoteListModel.contains(s)){
-                             toSample(trackID);
-        				 }
+            public void actionPerformed(ActionEvent e) {
+                if (outputList.getModel().getSize() != 0) {
+                    for (int i = 0; i < outputList.getModel().getSize(); i++) {
+                        int trackID = getTrackID(outputList.getModel().getElementAt(i));
+                        String s = "Track " + trackID;
+                        if (!sampleListModel.contains(s) && !hitNoteListModel.contains(s)) {
+                            toSample(trackID);
+                        }
 
-        			}
+                    }
                 }
-        	}
+            }
         });
-        
+
         btnRestToHitNotes = new JButton("Rest to Hit Notes");
         btnRestToHitNotes.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		if (outputList.getModel().getSize()!=0) {
-        			for (int i = 0; i<outputList.getModel().getSize();i++){
-        				 int trackID = getTrackID(outputList.getModel().getElementAt(i));
-        				 String s = "Track "+trackID;
-        				 if (!sampleListModel.contains(s) && !hitNoteListModel.contains(s)){
-                             toHitNote(trackID);
-        				 }
+            public void actionPerformed(ActionEvent e) {
+                if (outputList.getModel().getSize() != 0) {
+                    for (int i = 0; i < outputList.getModel().getSize(); i++) {
+                        int trackID = getTrackID(outputList.getModel().getElementAt(i));
+                        String s = "Track " + trackID;
+                        if (!sampleListModel.contains(s) && !hitNoteListModel.contains(s)) {
+                            toHitNote(trackID);
+                        }
 
-        			}
+                    }
                 }
-        	}
+            }
         });
-        
+
         btnClearAll = new JButton("Clear All");
         btnClearAll.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		hitNoteListModel.clear();
-        		sampleListModel.clear();
-        	}
+            public void actionPerformed(ActionEvent e) {
+                hitNoteListModel.clear();
+                sampleListModel.clear();
+            }
         });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1Layout.setHorizontalGroup(
-        	jPanel1Layout.createParallelGroup(Alignment.LEADING)
-        		.addGroup(jPanel1Layout.createSequentialGroup()
-        			.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING, false)
-        				.addGroup(jPanel1Layout.createSequentialGroup()
-        					.addContainerGap()
-        					.addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE))
-        				.addGroup(jPanel1Layout.createSequentialGroup()
-        					.addGap(30)
-        					.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
-        						.addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-        						.addGroup(jPanel1Layout.createSequentialGroup()
-        							.addComponent(jLabel2)
-        							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        							.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING, false)
-        								.addComponent(sampleButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        								.addComponent(btnAllToSample, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        								.addComponent(btnRestToSample, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-        			.addPreferredGap(ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-        			.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING, false)
-        				.addGroup(jPanel1Layout.createSequentialGroup()
-        					.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
-        					.addGap(61))
-        				.addGroup(jPanel1Layout.createSequentialGroup()
-        					.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING, false)
-        						.addComponent(hitNoteButton, GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-        						.addComponent(btnAllToHitNotes, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        						.addComponent(btnRestToHitNotes, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        					.addPreferredGap(ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-        					.addComponent(jLabel3)
-        					.addGap(77)))
-        			.addGap(61))
-        		.addGroup(jPanel1Layout.createSequentialGroup()
-        			.addGap(291)
-        			.addComponent(jLabel1)
-        			.addContainerGap(460, Short.MAX_VALUE))
-        		.addGroup(jPanel1Layout.createSequentialGroup()
-        			.addGap(189)
-        			.addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
-        			.addGap(38)
-        			.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
-        				.addComponent(instrumentButton, GroupLayout.PREFERRED_SIZE, 168, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(volumeButton, GroupLayout.PREFERRED_SIZE, 168, GroupLayout.PREFERRED_SIZE))
-        			.addGap(96))
+                jPanel1Layout.createParallelGroup(Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(30)
+                                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
+                                                .addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addComponent(jLabel2)
+                                                        .addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING, false)
+                                                                .addComponent(sampleButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(btnAllToSample, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(btnRestToSample, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                        .addPreferredGap(ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
+                                        .addGap(61))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING, false)
+                                                .addComponent(hitNoteButton, GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                                                .addComponent(btnAllToHitNotes, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnRestToHitNotes, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                                        .addComponent(jLabel3)
+                                        .addGap(77)))
+                        .addGap(61))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(291)
+                        .addComponent(jLabel1)
+                        .addContainerGap(460, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(189)
+                        .addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
+                        .addGap(38)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
+                                .addComponent(instrumentButton, GroupLayout.PREFERRED_SIZE, 168, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(volumeButton, GroupLayout.PREFERRED_SIZE, 168, GroupLayout.PREFERRED_SIZE))
+                        .addGap(96))
         );
         jPanel1Layout.setVerticalGroup(
-        	jPanel1Layout.createParallelGroup(Alignment.TRAILING)
-        		.addGroup(jPanel1Layout.createSequentialGroup()
-        			.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
-        				.addGroup(jPanel1Layout.createSequentialGroup()
-        					.addGap(17)
-        					.addComponent(jLabel1)
-        					.addPreferredGap(ComponentPlacement.UNRELATED)
-        					.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
-        						.addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
-        						.addGroup(jPanel1Layout.createSequentialGroup()
-        							.addGap(27)
-        							.addComponent(instrumentButton, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-        							.addGap(32)
-        							.addComponent(volumeButton, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))))
-        				.addGroup(jPanel1Layout.createSequentialGroup()
-        					.addGap(64)
-        					.addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)))
-        			.addGap(32)
-        			.addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
-        				.addComponent(sampleButton, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(hitNoteButton, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-        			.addGap(18)
-        			.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
-        				.addComponent(btnRestToSample, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-        				.addComponent(btnRestToHitNotes, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
-        			.addGap(18)
-        			.addGroup(jPanel1Layout.createParallelGroup(Alignment.TRAILING)
-        				.addComponent(jLabel2)
-        				.addComponent(jLabel3)
-        				.addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
-        					.addComponent(btnAllToSample, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-        					.addComponent(btnAllToHitNotes, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)))
-        			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
-        				.addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE))
-        			.addContainerGap())
+                jPanel1Layout.createParallelGroup(Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(17)
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
+                                                .addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addGap(27)
+                                                        .addComponent(instrumentButton, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(32)
+                                                        .addComponent(volumeButton, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(64)
+                                        .addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)))
+                        .addGap(32)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
+                                .addComponent(sampleButton, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(hitNoteButton, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+                        .addGap(18)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
+                                .addComponent(btnRestToSample, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                                .addComponent(btnRestToHitNotes, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
+                        .addGap(18)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.TRAILING)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3)
+                                .addGroup(jPanel1Layout.createParallelGroup(Alignment.BASELINE)
+                                        .addComponent(btnAllToSample, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnAllToHitNotes, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
+                                .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())
         );
         jPanel1.setLayout(jPanel1Layout);
 
@@ -470,102 +466,102 @@ public class WindowOption extends javax.swing.JFrame {
         });
 
         extractHitsoundCheckbox.setText("Extract Hitsound");
-        
+
         chckbxMergeHS = new JCheckBox("Merge notes faster than 1/4");
         chckbxMergeHS.setSelected(mergeHS);
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         layout.setHorizontalGroup(
-        	layout.createParallelGroup(Alignment.LEADING)
-        		.addGroup(layout.createSequentialGroup()
-        			.addGap(22)
-        			.addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, 680, GroupLayout.PREFERRED_SIZE)
-        			.addGap(78)
-        			.addGroup(layout.createParallelGroup(Alignment.LEADING)
-        				.addGroup(layout.createSequentialGroup()
-        					.addComponent(chckbxMergeHS)
-        					.addContainerGap())
-        				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-        					.addGroup(layout.createSequentialGroup()
-        						.addPreferredGap(ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
-        						.addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-        						.addGap(72))
-        					.addGroup(layout.createSequentialGroup()
-        						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-        							.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-        								.addGroup(layout.createSequentialGroup()
-        									.addComponent(coopCheckBox)
-        									.addGap(111)
-        									.addComponent(keySetLabel))
-        								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-        									.addComponent(jButton6, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-        									.addComponent(keySetSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-        									.addComponent(jLabel6)
-        									.addComponent(jLabel4)
-        									.addGroup(layout.createParallelGroup(Alignment.LEADING)
-        										.addComponent(difficultySlider, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-        										.addComponent(maxChordSlider, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-        										.addComponent(difficultyLabel, Alignment.TRAILING)
-        										.addComponent(chordLabel, Alignment.TRAILING))
-        									.addComponent(jLabel5)))
-        							.addComponent(extractHitsoundCheckbox))
-        						.addContainerGap(43, Short.MAX_VALUE)))))
-        		.addGroup(layout.createSequentialGroup()
-        			.addGap(42)
-        			.addComponent(playButton, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-        			.addPreferredGap(ComponentPlacement.UNRELATED)
-        			.addComponent(pauseButton, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-        			.addGap(18)
-        			.addComponent(stopButton, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-        			.addGap(88)
-        			.addComponent(soloButton, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-        			.addGap(26)
-        			.addComponent(muteButton, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-        			.addContainerGap(419, Short.MAX_VALUE))
+                layout.createParallelGroup(Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(22)
+                        .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, 680, GroupLayout.PREFERRED_SIZE)
+                        .addGap(78)
+                        .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(chckbxMergeHS)
+                                        .addContainerGap())
+                                .addGroup(layout.createParallelGroup(Alignment.TRAILING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addPreferredGap(ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                                                .addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+                                                .addGap(72))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                                        .addGroup(layout.createParallelGroup(Alignment.TRAILING)
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                        .addComponent(coopCheckBox)
+                                                                        .addGap(111)
+                                                                        .addComponent(keySetLabel))
+                                                                .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                                                        .addComponent(jButton6, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(keySetSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(jLabel6)
+                                                                        .addComponent(jLabel4)
+                                                                        .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                                                                .addComponent(difficultySlider, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                                                .addComponent(maxChordSlider, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                                                .addComponent(difficultyLabel, Alignment.TRAILING)
+                                                                                .addComponent(chordLabel, Alignment.TRAILING))
+                                                                        .addComponent(jLabel5)))
+                                                        .addComponent(extractHitsoundCheckbox))
+                                                .addContainerGap(43, Short.MAX_VALUE)))))
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(42)
+                        .addComponent(playButton, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(ComponentPlacement.UNRELATED)
+                        .addComponent(pauseButton, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+                        .addGap(18)
+                        .addComponent(stopButton, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                        .addGap(88)
+                        .addComponent(soloButton, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+                        .addGap(26)
+                        .addComponent(muteButton, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(419, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-        	layout.createParallelGroup(Alignment.TRAILING)
-        		.addGroup(layout.createSequentialGroup()
-        			.addGroup(layout.createParallelGroup(Alignment.LEADING)
-        				.addGroup(layout.createSequentialGroup()
-        					.addGap(64)
-        					.addComponent(jLabel4)
-        					.addPreferredGap(ComponentPlacement.RELATED)
-        					.addComponent(difficultySlider, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-        					.addPreferredGap(ComponentPlacement.RELATED)
-        					.addComponent(difficultyLabel)
-        					.addGap(37)
-        					.addComponent(jLabel5)
-        					.addPreferredGap(ComponentPlacement.RELATED)
-        					.addComponent(maxChordSlider, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-        					.addPreferredGap(ComponentPlacement.UNRELATED)
-        					.addComponent(chordLabel)
-        					.addGap(32)
-        					.addComponent(jLabel6)
-        					.addPreferredGap(ComponentPlacement.RELATED)
-        					.addComponent(keySetSlider, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-        					.addPreferredGap(ComponentPlacement.RELATED)
-        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-        						.addComponent(coopCheckBox)
-        						.addComponent(keySetLabel))
-        					.addPreferredGap(ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-        					.addComponent(jButton6, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
-        					.addGap(18)
-        					.addComponent(extractHitsoundCheckbox)
-        					.addPreferredGap(ComponentPlacement.UNRELATED)
-        					.addComponent(chckbxMergeHS)
-        					.addGap(9)
-        					.addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
-        				.addGroup(Alignment.TRAILING, layout.createSequentialGroup()
-        					.addContainerGap()
-        					.addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, 601, GroupLayout.PREFERRED_SIZE)))
-        			.addGap(18)
-        			.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-        				.addComponent(playButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(pauseButton, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(stopButton, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(muteButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(soloButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-        			.addContainerGap(35, Short.MAX_VALUE))
+                layout.createParallelGroup(Alignment.TRAILING)
+                .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addGap(64)
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(ComponentPlacement.RELATED)
+                                        .addComponent(difficultySlider, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(ComponentPlacement.RELATED)
+                                        .addComponent(difficultyLabel)
+                                        .addGap(37)
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(ComponentPlacement.RELATED)
+                                        .addComponent(maxChordSlider, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(ComponentPlacement.UNRELATED)
+                                        .addComponent(chordLabel)
+                                        .addGap(32)
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(ComponentPlacement.RELATED)
+                                        .addComponent(keySetSlider, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                                                .addComponent(coopCheckBox)
+                                                .addComponent(keySetLabel))
+                                        .addPreferredGap(ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                                        .addComponent(jButton6, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18)
+                                        .addComponent(extractHitsoundCheckbox)
+                                        .addPreferredGap(ComponentPlacement.UNRELATED)
+                                        .addComponent(chckbxMergeHS)
+                                        .addGap(9)
+                                        .addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
+                                .addGroup(Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, 601, GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18)
+                        .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                                .addComponent(playButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(pauseButton, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(stopButton, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(muteButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(soloButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(35, Short.MAX_VALUE))
         );
         getContentPane().setLayout(layout);
 
@@ -701,7 +697,7 @@ public class WindowOption extends javax.swing.JFrame {
             trackOptions[trackID] = 0;
         }
         writeToPropertyFile(System.getProperty("user.dir"));
-        MidiToOsuConverter converter = new MidiToOsuConverter(sequencer, name, extractHitSounds, keys, maxChord, overallDifficulty, trackOptions,mergeHS);
+        MidiToOsuConverter converter = new MidiToOsuConverter(sequencer, name, extractHitSounds, keys, maxChord, overallDifficulty, trackOptions, mergeHS);
         new Thread(converter).start();
         dispose();
 
@@ -709,51 +705,23 @@ public class WindowOption extends javax.swing.JFrame {
 
     private void readFromProperty(String path) {
         Properties prop = new Properties();
-        InputStream input = null;
-        try {
-            input = new FileInputStream(path + "\\config.properties");
+        try (InputStream input = new FileInputStream(path + "\\config.properties");) {
             prop.load(input);
             String s;
-            if ((s=prop.getProperty("extraction"))!=null){
-            	 extractHitSounds = s.equals("true");
-            } else {
-            	 extractHitSounds = false;
-            }
-            if ((s=prop.getProperty("keyCount"))!=null){
-            	keySet = Integer.parseInt(s);
-            } else {
-            	keySet = 7;
-            }
-            if ((s=prop.getProperty("OD"))!=null){
-            	overallDifficulty = Integer.parseInt(s);
-            } else {
-            	overallDifficulty = 10;
-            }
-            if ((s=prop.getProperty("maxChord"))!=null){
-            	maxChord = Integer.parseInt(s);
-            }else{
-            	maxChord = 5;
-            }
-            if ((s=prop.getProperty("coop"))!=null){
-            	 coop = s.equals("true");
-            } else {
-            	coop = false;
-            }
-            if ( (s = prop.getProperty("mergeHS"))!=null){
-            	 mergeHS = s.equals("true");
-            } else {
-            	 mergeHS = false;
-            }
-           
-            input.close();
+            extractHitSounds = (s = prop.getProperty("extraction")) != null && s.equals("true");
+            keySet = (s = prop.getProperty("keyCount")) != null ? Integer.parseInt(s) : 7;
+            overallDifficulty = (s = prop.getProperty("OD")) != null ? Integer.parseInt(s) : 7;
+            maxChord = (s = prop.getProperty("maxChord")) != null ? Integer.parseInt(s) : 5;
+            coop = (s = prop.getProperty("coop")) != null && s.equals("true");
+            mergeHS = (s = prop.getProperty("mergeHS")) != null && s.equals("true");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-    
-    private void toHitNote(int trackID){
-    	String element = "Track " + trackID;
+
+    private void toHitNote(int trackID) {
+        String element = "Track " + trackID;
         if (!hitNoteListModel.contains(element)) {
             hitNoteListModel.addElement(element);
             sortList(hitNoteListModel);
@@ -764,33 +732,32 @@ public class WindowOption extends javax.swing.JFrame {
             sampleListModel.removeElement(element);
         }
     }
-   
-    
-    private void toSample(int trackID){
-            String element = "Track " + trackID;
-            if (!sampleListModel.contains(element)) {
-                sampleListModel.addElement(element);
-                sortList(sampleListModel);
-            } else {
-                sampleListModel.removeElement(element);
-            }
-            if (hitNoteListModel.contains(element)) {
-                hitNoteListModel.removeElement(element);
-            }
+
+    private void toSample(int trackID) {
+        String element = "Track " + trackID;
+        if (!sampleListModel.contains(element)) {
+            sampleListModel.addElement(element);
+            sortList(sampleListModel);
+        } else {
+            sampleListModel.removeElement(element);
+        }
+        if (hitNoteListModel.contains(element)) {
+            hitNoteListModel.removeElement(element);
+        }
     }
 
-    private void sortList(DefaultListModel<String> listModel){
-    	ArrayList<String> al = new ArrayList<>();
-    	for (int i = 0; i<listModel.size();i++){
-    		al.add(listModel.getElementAt(i));
-    	}
-    	Collections.sort(al);
-    	listModel.clear();
-    	for (String s : al){
-    		listModel.addElement(s);
-    	}
+    private void sortList(DefaultListModel<String> listModel) {
+        ArrayList<String> al = new ArrayList<>();
+        for (int i = 0; i < listModel.size(); i++) {
+            al.add(listModel.getElementAt(i));
+        }
+        Collections.sort(al);
+        listModel.clear();
+        for (String s : al) {
+            listModel.addElement(s);
+        }
     }
-    
+
     private void writeToPropertyFile(String path) {
         Properties prop = new Properties();
         OutputStream output = null;
@@ -817,7 +784,6 @@ public class WindowOption extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
