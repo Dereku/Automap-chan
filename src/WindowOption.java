@@ -112,7 +112,7 @@ public class WindowOption extends javax.swing.JFrame {
         coopCheckBox = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        DefaultListModel<String> list = new DefaultListModel<String>();
+        DefaultListModel<String> list = new DefaultListModel<>();
         List<Integer> tracks = MidiUtils.getTracks(sequencer);
         for (int i = 0; i < tracks.size(); i++) {
             list.addElement("Track " + tracks.get(i));
@@ -213,17 +213,14 @@ public class WindowOption extends javax.swing.JFrame {
 
         coopCheckBox.setText("Co-op");
         coopCheckBox.setSelected(coop);
-        coopCheckBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                keySetLabel.setText(Integer.toString(keySetSlider.getValue()));
-                int max = keySetSlider.getValue();
-                if (coopCheckBox.isSelected()) {
-                    max = max * 2;
-                }
-                maxChordSlider.setMaximum(max);
-                maxChordSlider.setValue(keySetSlider.getValue());
+        coopCheckBox.addActionListener((ActionEvent event) -> {
+            keySetLabel.setText(Integer.toString(keySetSlider.getValue()));
+            int max = keySetSlider.getValue();
+            if (coopCheckBox.isSelected()) {
+                max = max * 2;
             }
+            maxChordSlider.setMaximum(max);
+            maxChordSlider.setValue(keySetSlider.getValue());
         });
         outputList.setSelectionMode(SINGLE_SELECTION);
         outputList.setModel(list);
@@ -239,18 +236,10 @@ public class WindowOption extends javax.swing.JFrame {
         jScrollPane1.setViewportView(hitNoteList);
 
         sampleButton.setText("Sample");
-        sampleButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sampleButtonActionPerformed(evt);
-            }
-        });
+        sampleButton.addActionListener(this::sampleButtonActionPerformed);
 
         hitNoteButton.setText("Hit Notes");
-        hitNoteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hitNoteButtonActionPerformed(evt);
-            }
-        });
+        hitNoteButton.addActionListener(this::hitNoteButtonActionPerformed);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18));
         jLabel2.setText("Sample");
@@ -259,18 +248,10 @@ public class WindowOption extends javax.swing.JFrame {
         jLabel3.setText("Hit Notes");
 
         instrumentButton.setText("Instrument");
-        instrumentButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                instrumentButtonActionPerformed(evt);
-            }
-        });
+        instrumentButton.addActionListener(this::instrumentButtonActionPerformed);
 
         volumeButton.setText("Volume");
-        volumeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                volumeButtonActionPerformed(evt);
-            }
-        });
+        volumeButton.addActionListener(this::volumeButtonActionPerformed);
 
         JButton btnAllToSample = new JButton("All to Sample");
         btnAllToSample.addActionListener(new ActionListener() {

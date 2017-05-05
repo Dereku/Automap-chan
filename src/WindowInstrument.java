@@ -1,5 +1,4 @@
 
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
@@ -27,8 +26,8 @@ public class WindowInstrument extends javax.swing.JFrame {
         initComponents2();
     }
 
-   private void initComponents2(){
-         /* Set the Nimbus look and feel */
+    private void initComponents2() {
+        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -51,74 +50,67 @@ public class WindowInstrument extends javax.swing.JFrame {
         }
         //</editor-fold>
         int instrumentID = MidiUtils.getInstrumentID(oldSequencer, trackID);
-          Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(dim.width / 2 - getSize().width/ 2, dim.height / 2 - getSize().height / 2);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
         choiceType.addItemListener((ItemEvent e) -> {
             loadChoiceName(instrumentID);
         });
 
         // add items to instrument type drop box
-       loadChoiceType();
+        loadChoiceType();
 
-       setInstrument(instrumentID);
+        setInstrument(instrumentID);
         this.setVisible(true);
     }
-   
-   
-   private void setInstrument(int instrumentID){
-	   if (channel!=9){
-		   int typeIndex;
-	       if (instrumentID<113){
-	           typeIndex = instrumentID/8;
-	       } else {
-	           typeIndex = 14;
-	       }
-	       choiceType.select(typeIndex);
-	   } else {
-		   choiceType.select(0);
-	   }
-       loadChoiceName(instrumentID);
-   }
-   
-   private void loadChoiceType(){
-       choiceType.removeAll();
-        if (channel == 9){
+
+    private void setInstrument(int instrumentID) {
+        if (channel != 9) {
+            choiceType.select(instrumentID < 113 ? instrumentID / 8 : 14);
+        } else {
+            choiceType.select(0);
+        }
+        loadChoiceName(instrumentID);
+    }
+
+    private void loadChoiceType() {
+        choiceType.removeAll();
+        if (channel == 9) {
             choiceType.add("Percussion");
         } else {
-           for (String NORMAL_INSTRUMENT_TYPE : MidiUtils.NORMAL_INSTRUMENT_TYPE) {
-               choiceType.add(NORMAL_INSTRUMENT_TYPE);
-           }
-        }
-   }
-   
-   private void loadChoiceName(int instrumentID){
-       choiceName.removeAll();
-       if (channel == 9){
-           for (String inst : MidiUtils.PERCUSSION_SET){
-        	   choiceName.add(inst);
+            for (String NORMAL_INSTRUMENT_TYPE : MidiUtils.NORMAL_INSTRUMENT_TYPE) {
+                choiceType.add(NORMAL_INSTRUMENT_TYPE);
             }
-           choiceName.select(MidiUtils.getInstrumentNameIndex(instrumentID, channel));
-       } else {
-           int typeIndex = choiceType.getSelectedIndex();
-           int startIndex = typeIndex*8;
-           int endIndex;
+        }
+    }
 
-           if (typeIndex<14){
-               endIndex = (typeIndex+1)*8 - 1;
-           }  else {
-              endIndex = 127;
-           }
-           
-           for (int i = startIndex; i<= endIndex; i++){
-               choiceName.add(MidiUtils.NORMAL_INSTRUMENT_SET[i]);
-           }
+    private void loadChoiceName(int instrumentID) {
+        choiceName.removeAll();
+        if (channel == 9) {
+            for (String inst : MidiUtils.PERCUSSION_SET) {
+                choiceName.add(inst);
+            }
+            choiceName.select(MidiUtils.getInstrumentNameIndex(instrumentID, channel));
+        } else {
+            int typeIndex = choiceType.getSelectedIndex();
+            int startIndex = typeIndex * 8;
+            int endIndex;
 
-	       int nameID = instrumentID - (typeIndex*8);
-	       choiceName.select(nameID);
-       }
-       
-   } 
-   
+            if (typeIndex < 14) {
+                endIndex = (typeIndex + 1) * 8 - 1;
+            } else {
+                endIndex = 127;
+            }
+
+            for (int i = startIndex; i <= endIndex; i++) {
+                choiceName.add(MidiUtils.NORMAL_INSTRUMENT_SET[i]);
+            }
+
+            int nameID = instrumentID - (typeIndex * 8);
+            choiceName.select(nameID);
+        }
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -166,65 +158,64 @@ public class WindowInstrument extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addComponent(buttonChange, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(choiceType, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(choiceName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(buttonChange, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(68, 68, 68))
+                .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(choiceType, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(choiceName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(choiceType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(choiceName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 161, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonChange, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(59, 59, 59))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(choiceType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(choiceName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 161, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(buttonChange, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(59, 59, 59))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_buttonCancelActionPerformed
 
     private void buttonChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChangeActionPerformed
         boolean wasPlaying = false;
-        long tick=0;
-    	if (oldSequencer.isRunning()){
-        	tick = MidiUtils.pauseSequence(oldSequencer);
-        	wasPlaying = true;
+        long tick = 0;
+        if (oldSequencer.isRunning()) {
+            tick = MidiUtils.pauseSequence(oldSequencer);
+            wasPlaying = true;
         }
-    	int instrumentID = MidiUtils.getInstrumentID(choiceName.getSelectedItem());
+        int instrumentID = MidiUtils.getInstrumentID(choiceName.getSelectedItem());
         try {
             MidiUtils.setInstrument(oldSequencer, trackID, instrumentID);
-            if (wasPlaying){
-            	MidiUtils.resumeSequence(oldSequencer, tick);
+            if (wasPlaying) {
+                MidiUtils.resumeSequence(oldSequencer, tick);
             }
         } catch (InvalidMidiDataException ex) {
             Logger.getLogger(WindowInstrument.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.dispose();
     }//GEN-LAST:event_buttonChangeActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;

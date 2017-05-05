@@ -1,104 +1,14 @@
 
-import it.sauronsoftware.jave.AudioAttributes;
-import it.sauronsoftware.jave.Encoder;
-import it.sauronsoftware.jave.EncoderException;
-import it.sauronsoftware.jave.EncodingAttributes;
-import it.sauronsoftware.jave.InputFormatException;
-
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 
 public class Utils {
-    //Constants
-
-    private static final float SAMPLE_RATE = 4000;
-    private static final int SAMPLE_BIT_SIZE = 8;
-    private static final int CHANNELS = 2; //stereo
-
-    public static void createEmptyWAV(long durationMS, String fileName) {
-        File outputFile = new File(fileName + ".wav");
-        byte[] data = new byte[(int) durationMS];
-        for (int i = 0; i < durationMS; i++) {
-            data[i] = 0;
-        }
-        AudioFormat audioFormat = new AudioFormat(SAMPLE_RATE, SAMPLE_BIT_SIZE, CHANNELS, true, false);
-        ByteArrayInputStream bis = new ByteArrayInputStream(data);
-        AudioInputStream audioInputStream = new AudioInputStream(bis, audioFormat, data.length / audioFormat.getFrameSize());
-        try {
-            AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outputFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void convertHStoOGG(String path) {
-        File folder = new File(path);
-        if (folder.isDirectory() && folder.listFiles().length != 0) {
-            File[] files = folder.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                File source = files[i];
-                File target = new File(getFilenameWithoutExtensionFromPath(source.getAbsolutePath()) + ".ogg");
-                AudioAttributes audio = new AudioAttributes();
-                audio.setCodec("libvorbis");
-                audio.setBitRate(256000);
-                audio.setChannels(CHANNELS);
-                audio.setSamplingRate(44100);
-                EncodingAttributes attrs = new EncodingAttributes();
-                attrs.setFormat("ogg");
-                attrs.setAudioAttributes(audio);
-
-                Encoder encoder = new Encoder();
-
-                try {
-                    encoder.encode(source, target, attrs);
-                } catch (InputFormatException e) {
-                    System.out.println(i);
-                    System.out.println(source + "\n" + target + "\n" + attrs);
-                    e.printStackTrace();
-                } catch (IllegalArgumentException | EncoderException e) {
-                    e.printStackTrace();
-                }
-                // Delete wav
-                source.delete();
-                target.renameTo(source);
-            }
-        }
-    }
-
-    public static void createEmptyMp3(String fileName) {
-        File source = new File(fileName + ".wav");
-        File target = new File(fileName + ".mp3");
-        AudioAttributes audio = new AudioAttributes();
-        audio.setCodec("libmp3lame");
-        audio.setBitRate(192);
-        audio.setChannels(CHANNELS);
-        audio.setSamplingRate(8000);
-        EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
-        attrs.setAudioAttributes(audio);
-        Encoder encoder = new Encoder();
-        try {
-            encoder.encode(source, target, attrs);
-        } catch (IllegalArgumentException | EncoderException e) {
-            e.printStackTrace();
-        }
-        // Delete wav
-        source.delete();
-
-    }
-
     /**
      *
      * @param timeline in ticks
@@ -347,10 +257,6 @@ public class Utils {
                 }
                 index--;
             }
-            byte[] cutArray = new byte[index + 1];
-            for (int i = 0; i <= index; i++) {
-                cutArray[i] = input[i];
-            }
             return input;
         }
 
@@ -373,8 +279,7 @@ public class Utils {
     }
 
     public static int findAverage(ArrayList<Integer> array) {
-        int avg = 0;
-        int sum = 0;
+        int avg, sum = 0;
 
         for (int i = 0; i < array.size(); i++) {
             sum = sum + array.get(i);

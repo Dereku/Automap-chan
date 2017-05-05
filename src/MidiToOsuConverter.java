@@ -126,8 +126,6 @@ public class MidiToOsuConverter implements Runnable {
         Utils.createFolder(outputPath);
         if (songDurationInMS < 0) {
             JOptionPane.showMessageDialog(null, "Error with Midi file, no empty mp3 created!");
-        } else {
-            Utils.createEmptyWAV(songDurationInMS, outputPath + OsuBeatmap.audioName);
         }
 
         if (customHS) {
@@ -243,9 +241,6 @@ public class MidiToOsuConverter implements Runnable {
             extractNote(n, filename);
             currentSize++;
             progressWindow.updateProgress(currentSize);
-        }
-        if (convertOGG) {
-            Utils.convertHStoOGG(hitsoundPath);
         }
         progressWindow.display("Finished extracting all hit sounds");
     }
@@ -496,12 +491,6 @@ public class MidiToOsuConverter implements Runnable {
     }
 
     public void toOsuBeatmap(ArrayList<NoteArray> input) throws MidiUnavailableException, InvalidMidiDataException, IOException {
-        // Create empty WAV file with same duration as song
-        String silence = outputPath + OsuBeatmap.audioName;
-        if (songDurationInMS > 0) {
-            Utils.createEmptyMp3(silence);
-        }
-        currentSize++;
         NoteArray totalNotes = input.get(0);
         if (totalNotes.getSize() == 0) {
             System.out.println("No notes to convert!");
@@ -603,9 +592,6 @@ public class MidiToOsuConverter implements Runnable {
             }
             currentSize++;
             progressWindow.updateProgress(currentSize);
-        }
-        if (convertOGG) {
-            Utils.convertHStoOGG(hitsoundPath);
         }
         progressWindow.display("Finished extracting all hit sounds");
     }
